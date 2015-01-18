@@ -9,19 +9,16 @@ class Solution:
     # @param root, a tree node
     # @return a tree node
     def recoverTree(self, root):
-        self.prev, self.n1, self.n2 = None, None, None
-        self.inorder(root)
-        self.n1.val, self.n2.val = self.n2.val, self.n1.val
+        nodes = [None, None, None]
+        self.recoverTreeHelper(root, nodes)
+        nodes[0].val, nodes[1].val = nodes[1].val, nodes[0].val
         return root
         
-    def inorder(self, root):
-        if root is not None:
-            self.inorder(root.left)
-            if self.prev is None: self.prev = root
-            if self.n1 is None and self.prev.val > root.val:
-                self.n1 = self.prev
-                self.n2 = root
-            elif self.prev.val > root.val:
-                self.n2 = root
-            self.prev = root
-            self.inorder(root.right)
+    def recoverTreeHelper(self, root, nodes):
+        if root is None: return
+        self.recoverTreeHelper(root.left, nodes)
+        if nodes[2] and nodes[2].val > root.val:
+            nodes[1] = root
+            if nodes[0] is None: nodes[0] = nodes[2]
+        nodes[2] = root
+        self.recoverTreeHelper(root.right, nodes)
