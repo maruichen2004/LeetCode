@@ -10,9 +10,10 @@ class Solution:
     # @param postorder, a list of integers
     # @return a tree node
     def buildTree(self, inorder, postorder):
-        if len(inorder) == 0: return None
-        root = TreeNode(postorder[-1])
-        idx = inorder.index(postorder[-1])
-        root.left = self.buildTree(inorder[:idx], postorder[:idx])
-        root.right = self.buildTree(inorder[idx+1:], postorder[idx:-1])
+        if not inorder or not postorder: return None
+        rootVal = postorder.pop()
+        root = TreeNode(rootVal)
+        idx = inorder.index(root.val)
+        root.right = self.buildTree(inorder[idx+1:], postorder)
+        root.left = self.buildTree(inorder[:idx], postorder)
         return root
