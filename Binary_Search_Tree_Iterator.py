@@ -13,7 +13,7 @@ class BSTIterator:
     #@return: True if there has next node, or false
     def hasNext(self):
         # write your code here
-        return len(self.stack) != 0 or self.cur
+        return self.stack or self.cur
 
     #@return: return next node
     def next(self):
@@ -23,7 +23,7 @@ class BSTIterator:
             self.cur = self.cur.left
         parent = self.stack.pop()
         self.cur = parent.right
-        return parent
+        return parent.val
 
 # Your BSTIterator will be called like this:
 # i, v = BSTIterator(root), []
