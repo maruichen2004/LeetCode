@@ -10,4 +10,4 @@ class Solution:
 
    def reverse(self, s, begin, end):
       for i in range((end - begin)/2):
-         s[begin+i], s[end-1-i] = s[end-1-i], s[begin]
+         s[begin+i], s[end-1-i] = s[end-1-i], s[begin+i]
