@@ -4,7 +4,7 @@ class Solution:
         sofar = 0
         buf4 = ["", "", "", ""]
         nRead = self.read4(buf4)
-        while n Read != 0 and sofar < n:
+        while nRead != 0 and sofar < n:
             if nRead + sofar >= n:
                 for i in range(n - sofar):
                     buf[sofar + i] = buf4[i]
