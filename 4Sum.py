@@ -3,13 +3,13 @@ class Solution:
     def fourSum(self, num, target):
         if len(num) < 4: return []
         res, A, map = set(), sorted(num), {}
-        for p in range(len(A)):
+        for p in range(len(A) - 1):
             for q in range(p + 1, len(A)):
                 if A[p] + A[q] not in map:
                     map[A[p] + A[q]] = [(p, q)]
                 else: 
                     map[A[p] + A[q]].append((p, q))
-        for i in range(len(A)):
+        for i in range(len(A) - 3):
             for j in range(i + 1, len(A) - 2):
                 T = target - A[i] - A[j]
                 if T in map:
