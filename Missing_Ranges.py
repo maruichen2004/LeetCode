@@ -2,7 +2,7 @@ class Solution:
    def findMissingRanges(self, A, start, end):
       res = []
       prev = start - 1
-      for i in range(len(A)):
+      for i in range(len(A) + 1):
          cur = end + 1 if i == len(A) else A[i]
          if cur - prev >= 2: res.append(self.getRange(prev + 1, cur - 1))
          prev = cur
