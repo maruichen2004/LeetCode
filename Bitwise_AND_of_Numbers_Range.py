@@ -1,10 +1,16 @@
-ass Solution:
+class Solution:
     # @param {integer} m
     # @param {integer} n
     # @return {integer}
     def rangeBitwiseAnd(self, m, n):
-        i, diff = 0, n - m
-        while diff:
-            diff >>= 1
-            i += 1
-        return n & m >> i << i
+        if m == n or m == 0:
+            return m
+        temp = 1
+        while temp < m:
+            temp <<= 1
+            if m < temp and temp <= n:
+                return 0
+        ans = m
+        for i in xrange(m + 1, n + 1):
+            ans = ans & i
+        return ans
