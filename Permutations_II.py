@@ -1,19 +1,22 @@
-class Solution:
-    # @param num, a list of integer
-    # @return a list of lists of integers
-    def permuteUnique(self, num):
+class Solution(object):
+    def permuteUnique(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        visited = [False for i in range(len(nums))]
         res = []
-        visited = [False for i in range(len(num))]
-        self.permuteUniqueRec(res, [], sorted(num), visited, 0)
+        self.helper(sorted(nums), visited, 0, res, [])
         return res
         
-    def permuteUniqueRec(self, res, cur, num, visited, i):
-        if i == len(num):
-            if cur not in res: res.append(cur)
-        for j in range(len(num)):
-            if visited[j] == False:
-                visited[j] = True
-                next = cur + [num[j]]
-                self.permuteUniqueRec(res, next, num, visited, i + 1)
-                next = cur
-                visited[j] = False
+    def helper(self, nums, visited, i, res, cur):
+        if i == len(nums):
+            res.append(cur)
+        else:
+            for j in range(len(nums)):
+                if visited[j] == False:
+                    if j > 0 and nums[j] == nums[j - 1] and visited[j - 1] == 0:
+                        continue;
+                    visited[j] = True
+                    self.helper(nums, visited, i + 1, res, cur + [nums[j]])
+                    visited[j] = False
