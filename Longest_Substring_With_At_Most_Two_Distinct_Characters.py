@@ -1,16 +1,18 @@
-class Solution:
-    # @param s, a string
-    # @return an integer
+class Solution(object):
     def lengthOfLongestSubstringTwoDistinct(self, s):
-        longest, start, distinct_count, visited = 0, 0, 0, [0 for _ in xrange(256)]
-        for i, char in enumerate(s):
-            if visited[ord(char)] == 0:
-                distinct_count += 1
-            visited[ord(char)] += 1
-            while distinct_count > 2:
-                visited[ord(s[start])] -= 1
-                if visited[ord(s[start])] == 0:
-                    distinct_count -= 1
+        """
+        :type s: str
+        :rtype: int
+        """
+        longest, start, map = 0, 0, {}
+        for i, c in enumerate(s):
+            if c not in map:
+                map[c] = 0
+            map[c] += 1
+            while len(map) > 2:
+                map[s[start]] -= 1
+                if map[s[start]] == 0:
+                    del map[s[start]]
                 start += 1
             longest = max(longest, i - start + 1)
         return longest

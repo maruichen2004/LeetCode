@@ -1,18 +1,23 @@
-class Solution:
+# The read4 API is already defined for you.
+# @param buf, a list of characters
+# @return an integer
+# def read4(buf):
+
+class Solution(object):
     def read(self, buf, n):
-        if n == 0: return 0
-        sofar = 0
-        buf4 = ["", "", "", ""]
-        nRead = self.read4(buf4)
-        while nRead != 0 and sofar < n:
-            if nRead + sofar >= n:
-                for i in range(n - sofar):
-                    buf[sofar + i] = buf4[i]
-                return n
-            else:
-                for i in range(nRead):
-                    buf[sofar + i] = buf4[i]
-                sofar += nRead
-                buf4 = ["", "", "", ""]
-                nRead = self.read4(buf4)
-        return sofar
+        """
+        :type buf: Destination buffer (List[str])
+        :type n: Maximum number of characters to read (int)
+        :rtype: The number of characters read (int)
+        """
+        res = 0
+        while n > 0:
+            buf4 = [""] * 4
+            cur = read4(buf4)
+            if cur == 0:
+                return res
+            for i in range(min(cur, n)):
+                buf[res] = buf4[i]
+                res += 1
+                n -= 1
+        return res
