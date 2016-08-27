@@ -6,12 +6,10 @@ class Solution(object):
         :type word2: str
         :rtype: int
         """
-        idx1, idx2, res = -1, -1, sys.maxint
-        for i in range(len(words)):
-            if words[i] == word1:
-                idx1 = i
-            elif words[i] == word2:
-                idx2 = i
-            if idx1 != -1 and idx2 != -1:
-                res = min(res, abs(idx1 - idx2))
+        res, i = sys.maxint, -1
+        for j in range(len(words)):
+            if words[j] == word1 or words[j] == word2:
+                if i != -1 and words[i] != words[j]:
+                    res = min(res, j - i)
+                i = j
         return res
