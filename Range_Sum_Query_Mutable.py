@@ -1,13 +1,31 @@
+class SegTreeNode:
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+        self.val = 0
+        self.left = None
+        self.right = None
+        
 class NumArray(object):
     def __init__(self, nums):
         """
         initialize your data structure here.
         :type nums: List[int]
         """
-        self.nums = [0] * (len(nums) + 1)
-        self.bit = [0] * (len(nums) + 1)
-        for i in range(len(nums)):
-            self.update(i, nums[i])
+        self.root = self._buildSegTree(nums, 0, len(nums)-1)
+    
+    def _buildSegTree(self, nums, start, end):
+        if start > end:
+            return None
+        root = SegTreeNode(start, end)
+        if start == end:
+            root.val = nums[start]
+        else:
+            mid = (start + end) / 2
+            root.left = self._buildSegTree(nums, start, mid)
+            root.right = self._buildSegTree(nums, mid+1, end)
+            root.val = root.left.val + root.right.val
+        return root
 
     def update(self, i, val):
         """
@@ -15,12 +33,18 @@ class NumArray(object):
         :type val: int
         :rtype: int
         """
-        diff = val - self.nums[i+1]
-        j = i + 1
-        while j < len(self.nums):
-            self.bit[j] += diff
-            j += (j & -j)
-        self.nums[i+1] = val
+        self._update(self.root, i, val)
+        
+    def _update(self, root, i, val):
+        if root.start == root.end:
+            root.val = val
+            return
+        mid = (root.start + root.end) / 2
+        if i <= mid:
+            self._update(root.left, i, val)
+        else:
+            self._update(root.right, i, val)
+        root.val = root.left.val + root.right.val
 
     def sumRange(self, i, j):
         """
@@ -29,15 +53,19 @@ class NumArray(object):
         :type j: int
         :rtype: int
         """
-        return self.getSum(j+1) - self.getSum(i)
+        return self._sumRange(self.root, i, j)
+        
+    def _sumRange(self, root, i, j):
+        if root.start == i and root.end == j:
+            return root.val
+        mid = (root.start + root.end) / 2
+        if j <= mid:
+            return self._sumRange(root.left, i, j)
+        elif i >= mid + 1:
+            return self._sumRange(root.right, i, j)
+        else:
+            return self._sumRange(root.left, i, mid) + self._sumRange(root.right, mid+1, j)
 
-    def getSum(self, i):
-        res = 0
-        j = i
-        while j > 0:
-            res += self.bit[j]
-            j -= (j & -j)
-        return res
 
 # Your NumArray object will be instantiated and called as such:
 # numArray = NumArray(nums)
