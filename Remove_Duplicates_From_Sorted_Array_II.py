@@ -1,12 +1,12 @@
-class Solution:
-    # @param A a list of integers
-    # @return an integer
-    def removeDuplicates(self, A):
-        if len(A) == 0: return 0
-        i, same = 0, 0
-        for j in range(1, len(A)):
-            if A[i] != A[j] or same == 0:
-                same = A[i] == A[j]
+class Solution(object):
+    def removeDuplicates(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        i = 0
+        for num in nums:
+            if i < 2 or num > nums[i-2]:
+                nums[i] = num
                 i += 1
-                A[i] = A[j]
-        return i + 1
+        return i
