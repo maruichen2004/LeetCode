@@ -1,20 +1,15 @@
-class Solution:
-    # @param num, a list of integer
-    # @return an integer
-    def longestConsecutive(self, num):
-        dict = {x:False for x in num}
-        res = -1
-        for i in dict:
-            if dict[i] == False:
-                cur, len1 = i + 1, 0
-                while cur in dict:
-                    dict[cur] = True
-                    cur += 1
-                    len1 += 1
-                cur, len2 = i - 1, 0
-                while cur in dict:
-                    dict[cur] = True
-                    cur -= 1
-                    len2 += 1
-                res = max(res, 1 + len1 + len2)
+class Solution(object):
+    def longestConsecutive(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        nums = set(nums)
+        res = 0
+        for n in nums:
+            if n - 1 not in nums:
+                m = n + 1
+                while m in nums:
+                    m += 1
+                res = max(res, m - n)
         return res
