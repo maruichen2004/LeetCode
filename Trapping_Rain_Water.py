@@ -1,14 +1,22 @@
-class Solution:
-    # @param A, a list of integers
-    # @return an integer
-    def trap(self, A):
-        left_max, left_maxes, right_max, right_maxes, res = 0, [], 0, [], 0
-        for i in range(len(A)):
-            left_maxes.append(left_max)
-            left_max = max(left_max, A[i])
-        for i in reversed(range(len(A))):
-            right_maxes.insert(0, right_max)
-            right_max = max(right_max, A[i])
-        for i in range(len(A)):
-            res += max(0, min(left_maxes[i], right_maxes[i]) - A[i])
+class Solution(object):
+    def trap(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        if len(height) == 0:
+            return 0
+        res, l, r = 0, 0, len(height) - 1
+        while l < r:
+            min_height = min(height[l], height[r])
+            if min_height == height[l]:
+                l += 1
+                while l < r and height[l] < min_height:
+                    res += min_height - height[l]
+                    l += 1
+            else:
+                r -= 1
+                while l < r and height[r] < min_height:
+                    res += min_height - height[r]
+                    r -= 1
         return res
