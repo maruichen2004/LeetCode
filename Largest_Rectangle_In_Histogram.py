@@ -1,14 +1,14 @@
-class Solution:
-    # @param height, a list of integer
-    # @return an integer
-    def largestRectangleArea(self, height):
-        area, i, stack = 0, 0, []
-        while i <= len(height):
-            if len(stack) == 0 or (i < len(height) and height[i] > height[stack[-1]]):
-                stack.append(i)
-                i += 1
-            else:
-                last = stack.pop()
-                if len(stack) == 0: area = max(area, height[last] * i)
-                else: area = max(area, height[last] * (i - stack[-1] - 1))
-        return area
+class Solution(object):
+    def largestRectangleArea(self, heights):
+        """
+        :type heights: List[int]
+        :rtype: int
+        """
+        heights.append(0)
+        res, stack = 0, []
+        for i in range(len(heights)):
+            while stack and heights[i] < heights[stack[-1]]:
+                rect = heights[stack.pop()] * (i if not stack else i-1 - stack[-1])
+                res = max(res, rect)
+            stack.append(i)
+        return res

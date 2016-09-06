@@ -1,23 +1,23 @@
-class Solution:
-    # @param matrix, a list of lists of 1 length string
-    # @return an integer
+class Solution(object):
     def maximalRectangle(self, matrix):
-        if len(matrix) == 0: return 0
-        area, a = 0, [0 for i in range(len(matrix[0]))]
+        """
+        :type matrix: List[List[str]]
+        :rtype: int
+        """
+        if len(matrix) == 0 or len(matrix[0]) == 0:
+            return 0
+        res, heights = 0, [0] * (len(matrix[0]) + 1)
         for i in range(len(matrix)):
             for j in range(len(matrix[0])):
-                a[j] = a[j] + 1 if matrix[i][j] == "1" else 0
-            area = max(area, self.largestRectangle(a))
-        return area
+                heights[j] = heights[j] + 1 if matrix[i][j] == '1' else 0
+            res = max(res, self.largestRectangle(heights))
+        return res
         
-    def largestRectangle(self, height):
-        area, i, stack = 0, 0, []
-        while i <= len(height):
-            if len(stack) == 0 or (i < len(height) and height[i] > height[stack[-1]]):
-                stack.append(i)
-                i += 1
-            else:
-                last = stack.pop()
-                if len(stack) == 0: area = max(area, height[last] * i)
-                else: area = max(area, height[last] * (i - stack[-1] - 1))
-        return area
+    def largestRectangle(self, heights):
+        res, stack = 0, []
+        for i in range(len(heights)):
+            while stack and heights[i] < heights[stack[-1]]:
+                rect = heights[stack.pop()] * (i if not stack else i-1 - stack[-1])
+                res = max(res, rect)
+            stack.append(i)
+        return res
