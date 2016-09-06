@@ -1,14 +1,17 @@
-class Solution:
-    # @param {integer} s
-    # @param {integer[]} nums
-    # @return {integer}
+class Solution(object):
     def minSubArrayLen(self, s, nums):
-        start, sum, min_len = 0, 0, len(nums)
-        for i in range(len(nums)):
-            sum += nums[i]
+        """
+        :type s: int
+        :type nums: List[int]
+        :rtype: int
+        """
+        start, sum, res = 0, 0, len(nums) + 1
+        for end in range(len(nums)):
+            sum += nums[end]
             while sum >= s:
-                min_len = min(min_len, i - start + 1)
+                res = min(res, end - start + 1)
                 sum -= nums[start]
                 start += 1
-        if min_len == len(nums): return 0
-        return min_len
+        if res == len(nums) + 1:
+            return 0
+        return res
