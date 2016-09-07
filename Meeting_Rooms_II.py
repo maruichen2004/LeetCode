@@ -10,16 +10,10 @@ class Solution(object):
         :type intervals: List[Interval]
         :rtype: int
         """
-        starts, ends = [], []
+        intervals.sort(key=lambda x: x.start)
+        heap = []
         for interval in intervals:
-            starts.append(interval.start)
-            ends.append(interval.end)
-        res, endpos = 0, 0
-        starts.sort()
-        ends.sort()
-        for i in range(len(intervals)):
-            if starts[i] < ends[endpos]:
-                res += 1
-            else:
-                endpos += 1
-        return res
+            if heap and heap[0] <= interval.start:
+                heapq.heappop(heap)
+            heapq.heappush(heap, interval.end)
+        return len(heap)
