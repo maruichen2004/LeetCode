@@ -1,17 +1,16 @@
-class Solution:
-    # @param {integer[]} nums
-    # @param {integer} k
-    # @param {integer} t
-    # @return {boolean}
+class Solution(object):
     def containsNearbyAlmostDuplicate(self, nums, k, t):
-        if k < 1 or t < 0: return False
-        dic = collections.OrderedDict()
-        for n in nums:
-            key = n if not t else n // t
-            for m in (dic.get(key - 1), dic.get(key), dic.get(key + 1)):
-                if m is not None and abs(n - m) <= t:
+        """
+        :type nums: List[int]
+        :type k: int
+        :type t: int
+        :rtype: bool
+        """
+        map = {}
+        for i, n in enumerate(nums):
+            (bucket, offset) = (n/t, 1) if t != 0 else (n, 0)
+            for b in range(bucket - offset, bucket + offset + 1):
+                if b in map and abs(i - map[b][0]) <= k and abs(n - map[b][1]) <= t:
                     return True
-            if len(dic) == k:
-                dic.popitem(False)
-            dic[key] = n
+            map[bucket] = (i, n)
         return False
