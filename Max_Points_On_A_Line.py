@@ -1,30 +1,20 @@
-# Definition for a point
-# class Point:
+# Definition for a point.
+# class Point(object):
 #     def __init__(self, a=0, b=0):
 #         self.x = a
 #         self.y = b
 
-class Solution:
-    # @param points, a list of Points
-    # @return an integer
+class Solution(object):
     def maxPoints(self, points):
-        res = 0
-        for i in range(len(points)):
-            slopemap, same, inf, curmax = {}, 1, 0, 0
-            start = points[i]
-            for j in range(i + 1, len(points)):
-                end = points[j]
-                if start.x == end.x and start.y == end.y:
-                    same += 1
-                elif start.x == end.x:
-                    inf += 1
-                else:
-                    slope = 1.0 * (start.y - end.y) / (start.x - end.x)
-                    if slope not in slopemap:
-                        slopemap[slope] = 1
-                    else:
-                        slopemap[slope] += 1
-            for slope in slopemap:
-                curmax = max(curmax, same + slopemap[slope])
-            res = max(res, same + inf, curmax)
-        return res
+        """
+        :type points: List[Point]
+        :rtype: int
+        """
+        d = collections.defaultdict(list)
+        for p, q in itertools.combinations(points, 2):
+            if p.x == q.x:
+                t = (float('inf'), p.x)
+            else:
+                t = ((p.y-q.y)/float((p.x-q.x)), (p.x*q.y-q.x*p.y)/float(p.x-q.x))
+            d[t] += [p, q]
+        return max(len(set(l)) for l in d.values()) if len(points) > 1 else len(points)
