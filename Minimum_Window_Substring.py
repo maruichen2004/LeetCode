@@ -1,24 +1,19 @@
-ass Solution:
-    # @return a string
-    def minWindow(self, S, T):
-        map = {}
-        for char in T:
-            if char not in map: map[char] = 1
-            else: map[char] += 1
-        count = len(T)
-        start, minstart, minsize = 0, 0, len(S) + 1
-        for end in range(len(S)):
-            if S[end] in map:
-                map[S[end]] -= 1
-                if map[S[end]] >= 0: count -= 1
-            if count == 0:
-                while True:
-                    if S[start] in map:
-                        if map[S[start]] < 0: map[S[start]] += 1
-                        else: break
+class Solution(object):
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+        need, missing = collections.Counter(t), len(t)
+        start, min_start, min_end = 0, 0, 0
+        for end, c in enumerate(s, 1):
+            missing -= need[c] > 0
+            need[c] -= 1
+            if missing == 0:
+                while start < end and need[s[start]] < 0:
+                    need[s[start]] += 1
                     start += 1
-                if end - start + 1 < minsize:
-                    minsize = end - start + 1
-                    minstart = start
-        if minsize == len(S) + 1: return ""
-        return S[minstart:minstart+minsize]
+                if min_end == 0 or end - start < min_end - min_start:
+                    min_start, min_end = start, end
+        return s[min_start:min_end]
