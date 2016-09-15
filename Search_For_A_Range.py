@@ -5,23 +5,29 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
-        res = [-1, -1]
-        l, r = 0, len(nums)-1
-        while l < r:
+        first, second = -1, -1
+        l, r = 0, len(nums) - 1
+        while l + 1 < r:
             mid = (l + r) / 2
             if nums[mid] < target:
-                l = mid + 1
+                l = mid
             else:
                 r = mid
-        if nums[l] != target:
-            return res
-        res[0] = l
-        r = len(nums)
-        while l < r:
+        if nums[l] == target:
+            first = l
+        elif nums[r] == target:
+            first = r
+        else:
+            return [-1, -1]
+        r = len(nums) - 1
+        while l + 1 < r:
             mid = (l + r) / 2
             if nums[mid] > target:
                 r = mid
             else:
-                l = mid + 1
-        res[1] = l-1
-        return res
+                l = mid
+        if nums[r] == target:
+            second = r
+        elif nums[l] == target:
+            second = l
+        return [first, second]
