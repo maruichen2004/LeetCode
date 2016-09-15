@@ -1,9 +1,11 @@
-class Solution:
-    # @return an integer
+class Solution(object):
     def trailingZeroes(self, n):
-        if n <= 0: return 0
-        res, d = 0, 5
-        while n >= d:
-            res += n / d
-            d *= 5
+        """
+        :type n: int
+        :rtype: int
+        """
+        res = 0
+        while n > 0:
+            res += n / 5
+            n /= 5
         return res
