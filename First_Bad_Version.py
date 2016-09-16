@@ -10,10 +10,14 @@ class Solution(object):
         :rtype: int
         """
         l, r = 1, n
-        while l < r:
-            mid = l + (r - l) / 2
+        while l + 1 < r:
+            mid = (l + r) / 2
             if isBadVersion(mid):
                 r = mid
             else:
-                l = mid + 1
-        return l
+                l = mid
+        if isBadVersion(l):
+            return l
+        if isBadVersion(r):
+            return r
+        return -1

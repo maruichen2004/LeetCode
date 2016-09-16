@@ -1,10 +1,17 @@
-class Solution:
-    # @param x, an integer
-    # @return an integer
-    def sqrt(self, x):
-        low, high = 0, x/2 + 1
-        while low <= high:
-            mid = (low + high) / 2
-            if x < mid * mid: high = mid - 1
-            else: low = mid + 1
-        return int(high)
+class Solution(object):
+    def mySqrt(self, x):
+        """
+        :type x: int
+        :rtype: int
+        """
+        l, r = 0, x
+        while l + 1 < r:
+            mid = (l + r) / 2
+            if mid * mid > x:
+                r = mid
+            else:
+                l = mid
+        if r*r <= x:
+            return r
+        if l*l <= x:
+            return l
