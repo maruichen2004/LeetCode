@@ -1,17 +1,25 @@
-class Solution:
-    # @param A a list of integers
-    # @param target an integer
-    # @return a boolean
-    def search(self, A, target):
-        l, r = 0, len(A) - 1
-        while l <= r:
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: bool
+        """
+        l, r = 0, len(nums) - 1
+        while l + 1 < r:
             mid = (l + r) / 2
-            if A[mid] == target: return True
-            if A[l] < A[mid]:
-                if A[l] <= target < A[mid]: r = mid - 1
-                else: l = mid + 1
-            elif A[mid] < A[l]:
-                if A[mid] < target <= A[r]: l = mid + 1
-                else: r = mid - 1
-            else: l += 1
-        return False
+            if nums[mid] == target:
+                return True
+            elif nums[mid] > nums[l]:
+                if nums[l] <= target < nums[mid]:
+                    r = mid
+                else:
+                    l = mid
+            elif nums[mid] < nums[l]:
+                if nums[mid] < target <= nums[r]:
+                    l = mid
+                else:
+                    r = mid
+            else:
+                l += 1
+        return nums[l] == target or nums[r] == target
