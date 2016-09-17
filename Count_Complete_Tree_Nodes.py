@@ -1,24 +1,23 @@
 # Definition for a binary tree node.
-# class TreeNode:
+# class TreeNode(object):
 #     def __init__(self, x):
 #         self.val = x
 #         self.left = None
 #         self.right = None
 
-class Solution:
-    # @param {TreeNode} root
-    # @return {integer}
+class Solution(object):
     def countNodes(self, root):
-        if root is None: return 0
-        leftHeight, rightHeight = self.getHeight(root.left), self.getHeight(root.right)
-        if leftHeight == rightHeight:
-            return 2 ** (leftHeight) + self.countNodes(root.right)
-        else:
-            return 2 ** (leftHeight - 1) + self.countNodes(root.left)
-            
-    def getHeight(self, root):
-        h = 0
-        while root:
-            root = root.left
-            h += 1
-        return h
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        left, left_height, right, right_height = root, 0, root, 0
+        while left:
+            left_height += 1
+            left = left.left
+        while right:
+            right_height += 1
+            right = right.right
+        if left_height == right_height:
+            return 2 ** left_height - 1
+        return self.countNodes(root.left) + self.countNodes(root.right) + 1

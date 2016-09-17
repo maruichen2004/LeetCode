@@ -1,46 +1,55 @@
-class TrieNode:
-    # Initialize your data structure here.
+class TrieNode(object):
     def __init__(self):
-        self.isTerminal = False
-        self.leaves = {}
+        """
+        Initialize your data structure here.
+        """
+        self.children = collections.defaultdict(TrieNode)
+        self.flag = False
+        
 
-class Trie:
+class Trie(object):
 
     def __init__(self):
         self.root = TrieNode()
 
-    # @param {string} word
-    # @return {void}
-    # Inserts a word into the trie.
     def insert(self, word):
-        cur = self.root
+        """
+        Inserts a word into the trie.
+        :type word: str
+        :rtype: void
+        """
+        node = self.root
         for c in word:
-            if not c in cur.leaves:
-                cur.leaves[c] = TrieNode()
-            cur = cur.leaves[c]
-        cur.isTerminal = True
+            node = node.children[c]
+        node.flag = True
 
-    # @param {string} word
-    # @return {boolean}
-    # Returns if the word is in the trie.
     def search(self, word):
-        res, node = self.childSearch(word)
-        if res: return node.isTerminal
-        return False
-
-    def childSearch(self, word):
-        cur = self.root
+        """
+        Returns if the word is in the trie.
+        :type word: str
+        :rtype: bool
+        """
+        node = self.root
         for c in word:
-            if c in cur.leaves: cur = cur.leaves[c]
-            else: return False, None
-        return True, cur
-        
-    # @param {string} prefix
-    # @return {boolean}
-    # Returns if there is any word in the trie
-    # that starts with the given prefix.
+            if c not in node.children:
+                return False
+            node = node.children[c]
+        return node.flag == True
+
     def startsWith(self, prefix):
-        return self.childSearch(prefix)[0]
+        """
+        Returns if there is any word in the trie
+        that starts with the given prefix.
+        :type prefix: str
+        :rtype: bool
+        """
+        node = self.root
+        for c in prefix:
+            if c not in node.children:
+                return False
+            node = node.children[c]
+        return True
+
 # Your Trie object will be instantiated and called as such:
 # trie = Trie()
 # trie.insert("somestring")

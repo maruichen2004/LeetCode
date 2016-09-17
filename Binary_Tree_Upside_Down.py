@@ -11,13 +11,12 @@ class Solution(object):
         :type root: TreeNode
         :rtype: TreeNode
         """
-        cur = root
-        prev, next, tmp = None, None, None
-        while cur:
-            next = cur.left
-            cur.left = tmp
-            tmp = cur.right
-            cur.right = prev
-            prev = cur
-            cur = next
-        return prev
+        if root is None or root.left is None:
+            return root
+        left, right = root.left, root.right
+        res = self.upsideDownBinaryTree(left)
+        left.left = right
+        left.right = root
+        root.left = None
+        root.right = None
+        return res
