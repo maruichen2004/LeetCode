@@ -2,38 +2,40 @@ class TrieNode:
     def __init__(self):
         self.children = collections.defaultdict(TrieNode)
         self.flag = False
-
-class Solution:
-    def __init__(self):
-        self.root = TrieNode()
-        self.result = []
-
-    def insert(self, word):
-        node = self.root
-        for letter in word:
-            node = node.children[letter]
-        node.flag = True
-
+        
+class Solution(object):
     def findWords(self, board, words):
-        for w in words:
-            self.insert(w)
-        for j in range(len(board)):
-            for i in range(len(board[0])):
-                self.dfs(self.root, board, j, i)
-        return self.result
-
-    def dfs(self, node, board, j, i, word=''):
+        """
+        :type board: List[List[str]]
+        :type words: List[str]
+        :rtype: List[str]
+        """
+        trie = TrieNode()
+        for word in words:
+            self.insert(trie, word)
+        res = []
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                self.dfs(trie, board, i, j, '', res)
+        return res
+        
+    def insert(self, trie, word):
+        node = trie
+        for c in word:
+            node = node.children[c]
+        node.flag = True
+        
+    def dfs(self, node, board, i, j, word, res):
         if node.flag:
-            self.result.append(word)
+            res.append(word)
             node.flag = False
-        if 0 <= j < len(board) and 0 <= i < len(board[0]):
-            char = board[j][i]
+        elif 0 <= i < len(board) and 0 <= j < len(board[0]):
+            char = board[i][j]
             child = node.children.get(char)
             if child is not None:
-                word += char
-                board[j][i] = None
-                self.dfs(child, board, j + 1, i, word)
-                self.dfs(child, board, j - 1, i, word)
-                self.dfs(child, board, j, i + 1, word)
-                self.dfs(child, board, j, i - 1, word)
-                board[j][i] = char
+                board[i][j] = None
+                self.dfs(child, board, i+1, j, word+char, res)
+                self.dfs(child, board, i-1, j, word+char, res)
+                self.dfs(child, board, i, j+1, word+char, res)
+                self.dfs(child, board, i, j-1, word+char, res)
+                board[i][j] = char
