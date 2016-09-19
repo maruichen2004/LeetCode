@@ -1,13 +1,19 @@
-class Solution:
-    # @return a list of lists of integers
+class Solution(object):
     def combine(self, n, k):
+        """
+        :type n: int
+        :type k: int
+        :rtype: List[List[int]]
+        """
         res = []
-        self.combineRec(res, [], n, k, 1)
+        self.dfs(n, k, [], res)
         return res
-    
-    def combineRec(self, res, cur, n, k, i):
-        if len(cur) == k and cur not in res:
+        
+    def dfs(self, n, k, cur, res):
+        if k == 0:
             res.append(cur)
-        if i <= n:
-            self.combineRec(res, cur, n, k, i + 1)
-            self.combineRec(res, cur + [i], n, k, i + 1)
+        else:
+            for i in reversed(range(1, n+1)):
+                if k > i:
+                    break
+                self.dfs(i-1, k-1, cur+[i], res)
