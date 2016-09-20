@@ -1,15 +1,19 @@
-class Solution:
-    # @param candidates, a list of integers
-    # @param target, integer
-    # @return a list of lists of integers
+class Solution(object):
     def combinationSum(self, candidates, target):
+        """
+        :type candidates: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
         res = []
-        self.combinationSumRec(res, [], sorted(candidates), target, 0)
+        self.dfs(sorted(candidates), target, 0, [], res)
         return res
         
-    def combinationSumRec(self, res, cur, candidates, target, i):
-        if target == 0: res.append(cur)
+    def dfs(self, candidates, target, i, cur, res):
+        if target < 0:
+            return
+        if target == 0:
+            res.append(cur)
         else:
-            while i < len(candidates) and candidates[i] <= target:
-                self.combinationSumRec(res, cur + [candidates[i]], candidates, target - candidates[i], i)
-                i += 1
+            for j in range(i, len(candidates)):
+                self.dfs(candidates, target - candidates[j], j, cur + [candidates[j]], res)

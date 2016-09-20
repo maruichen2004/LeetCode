@@ -1,13 +1,14 @@
-class Solution:
-    # @param S, a list of integer
-    # @return a list of lists of integer
-    def subsets(self, S):
+class Solution(object):
+    def subsets(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
         res = []
-        self.subsetsRec(res, [], sorted(S), 0)
+        self.dfs(nums, 0, [], res)
         return res
         
-    def subsetsRec(self, res, cur, S, i):
-        if i == len(S): res.append(cur)
-        if i < len(S):
-            self.subsetsRec(res, cur, S, i + 1)
-            self.subsetsRec(res, cur + [S[i]], S, i + 1)
+    def dfs(self, nums, i, cur, res):
+        res.append(cur)
+        for j in range(i, len(nums)):
+            self.dfs(nums, j+1, cur+[nums[j]], res)

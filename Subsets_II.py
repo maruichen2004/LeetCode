@@ -1,13 +1,16 @@
-class Solution:
-    # @param num, a list of integer
-    # @return a list of lists of integer
-    def subsetsWithDup(self, S):
+class Solution(object):
+    def subsetsWithDup(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
         res = []
-        self.subsetsWithDupRec(res, [], sorted(S), 0)
+        self.dfs(sorted(nums), 0, [], res)
         return res
-    
-    def subsetsWithDupRec(self, res, cur, S, i):
-        if i == len(S) and cur not in res: res.append(cur)
-        if i < len(S):
-            self.subsetsWithDupRec(res, cur, S, i + 1)
-            self.subsetsWithDupRec(res, cur + [S[i]], S, i + 1)
+        
+    def dfs(self, nums, i, cur, res):
+        res.append(cur)
+        for j in range(i, len(nums)):
+            if j > i and nums[j] == nums[j-1]:
+                continue
+            self.dfs(nums, j+1, cur + [nums[j]], res)
