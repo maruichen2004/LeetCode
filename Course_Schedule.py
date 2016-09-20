@@ -1,21 +1,27 @@
-class Solution:
-    # @param {integer} numCourses
-    # @param {integer[][]} prerequisites
-    # @return {boolean}
+class Solution(object):
     def canFinish(self, numCourses, prerequisites):
-        queue, indegree, outdegree = [], {}, {}
-        for i, j in prerequisites:
-            if i not in indegree: indegree[i] = {}
-            if j not in outdegree: outdegree[j] = {}
-            indegree[i][j] = True
-            outdegree[j][i] = True
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: bool
+        """
+        graph = collections.defaultdict(list)
+        visited = [0] * numCourses
+        for cur, pre in prerequisites:
+            graph[pre].append(cur)
         for i in range(numCourses):
-            if i not in indegree: queue.append(i)
-        while queue:
-            prerequisite = queue.pop()
-            if prerequisite in outdegree:
-                for course in outdegree[prerequisite]:
-                    del indegree[course][prerequisite]
-                    if not indegree[course]: queue.append(course)
-                del outdegree[prerequisite]
-        return len(outdegree) == 0
+            if not self.dfs(graph, visited, i):
+                return False
+        return True
+        
+    def dfs(self, graph, visited, i):
+        if visited[i] == -1:
+            return False
+        if visited[i] == 1:
+            return True
+        visited[i] = -1
+        for cur in graph[i]:
+            if not self.dfs(graph, visited, cur):
+                return False
+        visited[i] = 1
+        return True

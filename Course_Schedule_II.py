@@ -1,22 +1,29 @@
-class Solution:
-    # @param {integer} numCourses
-    # @param {integer[][]} prerequisites
-    # @return {integer[]}
+class Solution(object):
     def findOrder(self, numCourses, prerequisites):
-        res, queue, indegree, outdegree = [], [], {}, {}
-        for i, j in prerequisites:
-            if i not in indegree: indegree[i] = {}
-            if j not in outdegree: outdegree[j] = {}
-            indegree[i][j] = True
-            outdegree[j][i] = True
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: List[int]
+        """
+        graph = collections.defaultdict(list)
+        visited = [0] * numCourses
+        res = []
+        for cur, pre in prerequisites:
+            graph[pre].append(cur)
         for i in range(numCourses):
-            if i not in indegree: queue.append(i)
-        while queue:
-            prerequisite = queue.pop()
-            res.append(prerequisite)
-            if prerequisite in outdegree:
-                for course in outdegree[prerequisite]:
-                    del indegree[course][prerequisite]
-                    if not indegree[course]: queue.append(course)
-                del outdegree[prerequisite]
-        return [] if len(outdegree) else res
+            if not self.dfs(graph, visited, i, res):
+                return []
+        return res[::-1]
+        
+    def dfs(self, graph, visited, i, res):
+        if visited[i] == -1:
+            return False
+        if visited[i] == 1:
+            return True
+        visited[i] = -1
+        for cur in graph[i]:
+            if not self.dfs(graph, visited, cur, res):
+                return False
+        res.append(i)
+        visited[i] = 1
+        return True
