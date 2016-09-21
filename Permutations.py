@@ -1,13 +1,20 @@
-class Solution:
-    # @param num, a list of integer
-    # @return a list of lists of integers
-    def permute(self, num):
+class Solution(object):
+    def permute(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
         res = []
-        self.permuteRec(res, [], num, 0)
+        visited = [False] * (len(nums))
+        self.dfs(nums, visited, 0, [], res)
         return res
         
-    def permuteRec(self, res, cur, num, i):
-        if i == len(num): res.append(cur)
-        for j in range(len(num)):
-            if num[j] not in cur:
-                self.permuteRec(res, cur + [num[j]], num, i + 1)
+    def dfs(self, nums, visited, i, cur, res):
+        if i == len(nums):
+            res.append(cur)
+        else:
+            for j in range(len(nums)):
+                if visited[j] == False:
+                    visited[j] = True
+                    self.dfs(nums, visited, i+1, cur + [nums[j]], res)
+                    visited[j] = False

@@ -5,24 +5,28 @@ class Solution(object):
         :type edges: List[List[int]]
         :rtype: List[int]
         """
-        graph = [[] for i in range(n)]
-        for v1, v2 in edges:
-            graph[v1].append(v2)
-            graph[v2].append(v1)
-        p1 = self.longestPath(graph, 0)
-        p2 = self.longestPath(graph, p1[-1])
-        if len(p2) % 2:
-            return [p2[len(p2) / 2]]
-        else:
-            return [p2[len(p2) / 2 - 1], p2[len(p2) / 2]]
-
-    def longestPath(self, graph, root):
-        queue = collections.deque([[root]])
-        visited = set([root])
-        while queue:
-            path = queue.popleft()
-            for v in graph[path[-1]]:
-                if v not in visited:
-                    queue.append(path + [v])
-                    visited.add(v)
-        return path
+        if n == 1:
+            return [0]
+        graph = collections.defaultdict(list)
+        res, degree = [], [0] * n
+        for start, end in edges:
+            graph[start].append(end)
+            graph[end].append(start)
+            degree[start] += 1
+            degree[end] += 1
+        q = []
+        for i, d in enumerate(degree):
+            if d == 1:
+                q.append(i)
+        while n > 2:
+            size = len(q)
+            for i in range(size):
+                t = q.pop(0)
+                n -= 1
+                for j in graph[t]:
+                    degree[j] -= 1
+                    if degree[j] == 1:
+                        q.append(j)
+        while q:
+            res.append(q.pop(0))
+        return res

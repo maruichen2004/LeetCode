@@ -1,21 +1,22 @@
-class Solution:
-    # @param s, a string
-    # @return a list of strings
+class Solution(object):
     def restoreIpAddresses(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
         res = []
-        self.restoreIpAddressesRec(res, "", s, 0)
+        self.dfs(s, 0, "", res)
         return res
         
-    def restoreIpAddressesRec(self, res, cur, s, dots):
-        if (4 - dots) * 3 < len(s): return
-        if dots == 3:
-            if self.isValid(s): res.append(cur + s)
+    def dfs(self, s, i, cur, res):
+        if i == 4:
+            if len(s) == 0:
+                res.append(cur[:-1])
         else:
-            for i in range(3):
-                if len(s) > i and self.isValid(s[:i+1]):
-                    self.restoreIpAddressesRec(res, cur + s[:i+1] + ".", s[i+1:], dots + 1)
-    
-    def isValid(self, s):
-        if len(s) == 0 or (s[0] == "0" and s != "0"):
-            return False
-        return int(s) < 256
+            for j in range(1, 4):
+                if len(s) < j:
+                    break
+                val = int(s[:j])
+                if val > 255 or len(str(val)) != j:
+                    continue
+                self.dfs(s[j:], i+1, cur + s[:j] + '.', res)
