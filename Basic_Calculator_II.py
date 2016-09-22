@@ -1,30 +1,28 @@
-class Solution:
-    # @param {string} s
-    # @return {integer}
+class Solution(object):
     def calculate(self, s):
-        i, res, sign = 0, 0, 1
+        """
+        :type s: str
+        :rtype: int
+        """
+        res = 0
+        cur, i, stack, sign = 0, 0, [], '+'
         while i < len(s):
             if s[i].isdigit():
-                i, preNum = self.getNum(s, i)
-                pre = sign * preNum
-                res += pre
-            elif s[i] in "+-":
-                sign = 1 if s[i] == "+" else -1
-            elif s[i] in "*/":
-                j = i
-                res -= pre
-                i += 1
-                while not s[i].isdigit():
-                    i += 1
-                i, nextNum = self.getNum(s, i)
-                pre = pre * nextNum if s[j] == "*" else sign * (pre / sign / nextNum)
-                res += pre
+                cur = cur * 10 + int(s[i])
+            if s[i] in "+-*/" or i == len(s) - 1:
+                if sign == '+':
+                    stack.append(cur)
+                elif sign == '-':
+                    stack.append(-cur)
+                elif sign == '*':
+                    stack.append(stack.pop() * cur)
+                elif sign == '/':
+                    prev = stack.pop()
+                    if prev < 0:
+                        stack.append(-(-prev / cur))
+                    else:
+                        stack.append(prev / cur)
+                sign = s[i]
+                cur = 0
             i += 1
-        return res
-        
-    def getNum(self, s, i):
-        j = i
-        while i < len(s) and s[i].isdigit():
-            i += 1
-        i -= 1
-        return i, int(s[j:i+1])
+        return sum(stack)

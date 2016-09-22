@@ -1,29 +1,26 @@
-ass Solution:
-    # @param {string} s
-    # @return {integer}
+class Solution(object):
     def calculate(self, s):
-        operands, operators = [], []
-        operand = ""
-        for i in reversed(range(len(s))):
-            if s[i].isdigit():
-                operand += s[i]
-                if i == 0 or not s[i-1].isdigit():
-                    operands.append(int(operand[::-1]))
-                    operand = ""
-            elif s[i] == ")" or s[i] == "+" or s[i] == "-":
-                operators.append(s[i])
-            elif s[i] == "(":
-                while operators[-1] != ")":
-                    self.compute(operands, operators)
-                operators.pop()
-        while operators:
-            self.compute(operands, operators)
-        return operands[-1]
-        
-    def compute(self, operands, operators):
-        n1, n2 = operands.pop(), operands.pop()
-        op = operators.pop()
-        if op == "+":
-            operands.append(n1 + n2)
-        elif op == "-":
-            operands.append(n1 - n2)
+        """
+        :type s: str
+        :rtype: int
+        """
+        res = 0
+        sign = [1, 1]
+        i = 0
+        while i < len(s):
+            c = s[i]
+            if c.isdigit():
+                start = i
+                while i < len(s) and s[i].isdigit():
+                    i += 1
+                res += sign.pop() * int(s[start:i])
+                continue
+            if c in "+-(":
+                if c == '-':
+                    sign.append(sign[-1] * -1)
+                else:
+                    sign.append(sign[-1])
+            elif c == ')':
+                sign.pop()
+            i += 1
+        return res

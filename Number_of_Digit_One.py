@@ -1,15 +1,13 @@
-class Solution:
-    # @param {integer} n
-    # @return {integer}
+class Solution(object):
     def countDigitOne(self, n):
-        if n <= 0:
-            return 0
-        if 1 <= n <= 9:
-            return 1
-        head, level = n, 1
-        while head >= 10:
-            level *= 10
-            head /= 10
-        if n / level == 1:
-            return self.countDigitOne(level - 1) + self.countDigitOne(n - level) + n - level + 1
-        return (n / level) * self.countDigitOne(level - 1) + self.countDigitOne(n - n / level * level) + level
+        """
+        :type n: int
+        :rtype: int
+        """
+        res, a, b = 0, 1, 1
+        while n > 0:
+            res += (n + 8) / 10 * a + (n % 10 == 1) * b
+            b += n % 10 * a
+            a *= 10
+            n /= 10
+        return res

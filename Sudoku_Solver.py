@@ -11,18 +11,17 @@ class Solution(object):
     def dfs(self, board, row, col):
         if row == 9:
             return True
-        if col >= 9:
-            return self.dfs(board, row + 1, 0)
+        if col == 9:
+            return self.dfs(board, row+1, 0)
         if board[row][col] == '.':
-            for k in range(1, 10):
-                board[row][col] = str(k)
+            for i in range(1, 10):
+                board[row][col] = str(i)
                 if self.check(board, row, col):
-                    if self.dfs(board, row, col + 1):
+                    if self.dfs(board, row, col+1):
                         return True
                 board[row][col] = '.'
         else:
-            return self.dfs(board, row, col + 1)
-        return False
+            return self.dfs(board, row, col+1)
             
     def check(self, board, row, col):
         for i in range(len(board)):
@@ -33,6 +32,6 @@ class Solution(object):
                 return False
         for i in range(3*(row/3), 3*(row/3)+3):
             for j in range(3*(col/3), 3*(col/3)+3):
-                if (i != row or j != col) and board[i][j] == board[row][col]:
+                if i != row and j != col and board[i][j] == board[row][col]:
                     return False
         return True
