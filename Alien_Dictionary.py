@@ -4,30 +4,29 @@ class Solution(object):
         :type words: List[str]
         :rtype: str
         """
-        edges = []
+        graph = collections.defaultdict(list)
         for pair in zip(words, words[1:]):
             for a, b in zip(*pair):
                 if a != b:
-                    edges.append(a+b)
+                    graph[a].append(b)
                     break
-        chars = set(''.join(words))
-        indegree = [0] * 26
-        for e in edges:
-            indegree[ord(e[1]) - ord('a')] += 1
-        order = ""
-        queue = []
-        for c in chars:
-            if indegree[ord(c) - ord('a')] == 0:
-                queue.append(c)
-                order += c
-        while queue:
-            c = queue.pop(0)
-            for edge in edges:
-                if edge[0] == c:
-                    indegree[ord(edge[1]) - ord('a')] -= 1
-                    if indegree[ord(edge[1]) - ord('a')] == 0:
-                        queue.append(edge[1])
-                        order += edge[1]
-        if len(order) != len(chars):
+        indegree = collections.defaultdict(int)
+        for src in graph:
+            for end in graph[src]:
+                indegree[end] += 1
+        nodes = set(''.join(words))
+        q, res = [], ""
+        for node in nodes:
+            if indegree[node] == 0:
+                q.append(node)
+                res += node
+        while q:
+            node = q.pop(0)
+            for end in graph[node]:
+                indegree[end] -= 1
+                if indegree[end] == 0:
+                    q.append(end)
+                    res += end
+        if len(res) != len(nodes):
             return ""
-        return order
+        return res

@@ -8,18 +8,16 @@ class Solution(object):
         """
         margin = [y, y, x, x]
         visited = [[False for j in range(len(image[0]))] for i in range(len(image))]
-        self.dfs(image, visited, x, y, margin)
+        self.dfs(image, margin, visited, x, y)
         return (margin[1] - margin[0] + 1) * (margin[3] - margin[2] + 1)
         
-    def dfs(self, image, visited, x, y, margin):
-        if not 0 <= x < len(image) or not 0 <= y < len(image[0]) or visited[x][y] or image[x][y] != '1':
-            return
-        margin[0] = min(margin[0], y)
-        margin[1] = max(margin[1], y)
-        margin[2] = min(margin[2], x)
-        margin[3] = max(margin[3], x)
-        visited[x][y] = True
-        self.dfs(image, visited, x-1, y, margin)
-        self.dfs(image, visited, x+1, y, margin)
-        self.dfs(image, visited, x, y+1, margin)
-        self.dfs(image, visited, x, y-1, margin)
+    def dfs(self, image, margin, visited, i, j):
+        visited[i][j] = True
+        margin[0] = min(margin[0], j)
+        margin[1] = max(margin[1], j)
+        margin[2] = min(margin[2], i)
+        margin[3] = max(margin[3], i)
+        for x, y in [(i+1, j), (i-1, j), (i, j-1), (i, j+1)]:
+            if not 0 <= x < len(image) or not 0 <= y < len(image[0]) or visited[x][y] or image[x][y] == '0':
+                continue
+            self.dfs(image, margin, visited, x, y)
