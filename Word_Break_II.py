@@ -1,24 +1,29 @@
-class Solution:
-    # @param s, a string
-    # @param dict, a set of string
-    # @return a list of strings
-    def wordBreak(self, s, dict):
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: Set[str]
+        :rtype: List[str]
+        """
         res = []
-        self.wordBreakRec(res, "", s, dict)
+        self.dfs(s, wordDict, "", res)
         return res
         
-    def wordBreakRec(self, res, cur, s, dict):
-        if self.canBreak(s, dict):
-            if len(s) == 0: res.append(cur[1:])
-            for i in range(1, len(s) + 1):
-                if s[:i] in dict:
-                    self.wordBreakRec(res, cur + " " + s[:i], s[i:], dict)
-    
-    def canBreak(self, s, dict):
-        dp = [False for i in range(len(s) + 1)]
+    def dfs(self, s, wordDict, cur, res):
+        if len(s) == 0:
+            res.append(cur[1:])
+        else:
+            if self.check(s, wordDict):
+                for i in range(1, len(s) + 1):
+                    if s[:i] in wordDict:
+                        self.dfs(s[i:], wordDict, cur + ' ' + s[:i], res)
+                        
+    def check(self, s, wordDict):
+        dp = [False] * (len(s) + 1)
         dp[0] = True
         for i in range(1, len(s) + 1):
             for k in range(i):
-                if dp[k] and s[k:i] in dict:
+                if s[k:i] in wordDict and dp[k]:
                     dp[i] = True
+                    break
         return dp[len(s)]
