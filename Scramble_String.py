@@ -1,14 +1,24 @@
-class Solution:
-    # @return a boolean
+class Solution(object):
     def isScramble(self, s1, s2):
-        if len(s1) != len(s2): return False
-        if s1 == s2: return True
-        l1, l2 = sorted(list(s1)), sorted(list(s2))
-        if l1 != l2: return False
-        length = len(s1)
-        for i in range(1, length):
-            if self.isScramble(s1[:i], s2[:i]) and self.isScramble(s1[i:], s2[i:]):
-                return True
-            if self.isScramble(s1[:i], s2[length-i:]) and self.isScramble(s1[i:], s2[:length-i]):
-                return True
-        return False
+        """
+        :type s1: str
+        :type s2: str
+        :rtype: bool
+        """
+        if len(s1) != len(s2):
+            return False
+        if s1 == s2:
+            return True
+        n = len(s1)
+        dp = [[[False for k in range(n+1)] for j in range(n)] for i in range(n)]
+        for i in range(n):
+            for j in range(n):
+                dp[i][j][1] = s1[i] == s2[j]
+        for l in range(2, n+1):
+            for i in range(n-l+1):
+                for j in range(n-l+1):
+                    for k in range(1, l):
+                        if (dp[i][j][k] and dp[i+k][j+k][l-k]) or (dp[i+k][j][l-k] and dp[i][j+l-k][k]):
+                            dp[i][j][l] = True
+                            break
+        return dp[0][0][n]

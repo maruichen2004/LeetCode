@@ -1,16 +1,19 @@
-class Solution:
-    # @param {integer} k
-    # @param {integer} n
-    # @return {integer[][]}
+class Solution(object):
     def combinationSum3(self, k, n):
-        ret = []
-        self.helper(ret, [], 1, k, n)
-        return ret
+        """
+        :type k: int
+        :type n: int
+        :rtype: List[List[int]]
+        """
+        res = []
+        self.dfs(k, n, 1, [], res)
+        return res
         
-    def helper(self, ret, cur, start, k, target):
-        if k == 0 and target == 0:
-            ret.append(cur)
-        elif k < 0: return
-        while start < 10 and start * k + k * (k - 1) / 2 <= target:
-            self.helper(ret, cur + [start], start + 1, k - 1, target - start)
-            start += 1
+    def dfs(self, k, n, i, cur, res):
+        if n < 0:
+            return
+        if len(cur) == k and n == 0:
+            res.append(cur)
+        else:
+            for j in range(i, 10):
+                self.dfs(k, n-j, j+1, cur + [j], res)

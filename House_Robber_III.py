@@ -11,15 +11,18 @@ class Solution(object):
         :type root: TreeNode
         :rtype: int
         """
-        res = self.helper(root)
-        return max(res)
+        return self.dfs(root, {})
         
-    def helper(self, root):
+    def dfs(self, root, m):
         if root is None:
-            return [0, 0]
-        left = self.helper(root.left)
-        right = self.helper(root.right)
-        res = [0, 0]
-        res[0] = max(left) + max(right)
-        res[1] = left[0] + right[0] + root.val
+            return 0
+        if root in m:
+            return m[root]
+        val = 0
+        if root.left:
+            val += self.dfs(root.left.left, m) + self.dfs(root.left.right, m)
+        if root.right:
+            val += self.dfs(root.right.left, m) + self.dfs(root.right.right, m)
+        res = max(root.val + val, self.dfs(root.left, m) + self.dfs(root.right, m))
+        m[root] = res
         return res
