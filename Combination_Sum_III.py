@@ -10,10 +10,9 @@ class Solution(object):
         return res
         
     def dfs(self, k, n, i, cur, res):
-        if n < 0:
-            return
-        if len(cur) == k and n == 0:
+        if n == 0 and len(cur) == k:
             res.append(cur)
         else:
             for j in range(i, 10):
-                self.dfs(k, n-j, j+1, cur + [j], res)
+                if j <= n:
+                    self.dfs(k, n-j, j+1, cur + [j], res)
