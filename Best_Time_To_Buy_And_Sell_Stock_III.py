@@ -1,15 +1,15 @@
-class Solution:
-    # @param prices, a list of integer
-    # @return an integer
+class Solution(object):
     def maxProfit(self, prices):
-        min_price, max_profit, max_profits = 2**32 - 1, 0, []
-        for price in prices:
-            min_price = min(min_price, price)
-            max_profit = max(max_profit, price - min_price)
-            max_profits.append(max_profit)
-        max_price, max_profit_after, max_profit_combine = 0, 0, 0
-        for i in reversed(range(len(prices))):
-            max_price = max(max_price, prices[i])
-            max_profit_after = max(max_profit_after, max_price - prices[i])
-            max_profit_combine = max(max_profit_combine, max_profit_after + max_profits[i])
-        return max_profit_combine
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        if len(prices) == 0:
+            return 0
+        l, g = [0] * 3, [0] * 3
+        for i in range(len(prices) - 1):
+            diff = prices[i+1] - prices[i]
+            for j in reversed(range(1, 3)):
+                l[j] = max(g[j-1] + max(diff, 0), l[j] + diff)
+                g[j] = max(l[j], g[j])
+        return g[2]
