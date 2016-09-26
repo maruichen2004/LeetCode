@@ -4,28 +4,26 @@ class Solution(object):
         :type grid: List[List[str]]
         :rtype: int
         """
-        if grid is None or len(grid) == 0 or len(grid[0]) == 0:
+        if len(grid) == 0 or len(grid[0]) == 0:
             return 0
-
-        dp = [[[0, 0] for j in range(len(grid[0]))] for i in range(len(grid))]
-        for i in xrange(0, len(grid)):
-            for j in xrange(0, len(grid[0])):
-                if grid[i][j] == "E":
-                    dp[i][j] = [dp[i - 1][j][0] + 1,  + dp[i][j - 1][1] + 1]
-                elif grid[i][j] == "0":
-                    dp[i][j] = [dp[i - 1][j][0], dp[i][j - 1][1]]
-        maxKilled = 0
-        for i in reversed(xrange(0, len(grid))):
-            for j in reversed(xrange(0, len(grid[0]))):
-                if j != len(grid[0]) - 1:
-                    if grid[i][j + 1] != "W":
-                        dp[i][j][1] = dp[i][j + 1][1]
-                if i != len(grid) - 1:
-                    if grid[i + 1][j] != "W":
-                        dp[i][j][0] = dp[i + 1][j][0]
-                if grid[i][j] == "0":
-                    curKilled = dp[i][j][0] + dp[i][j][1]
-                    if curKilled > maxKilled:
-                        maxKilled = curKilled 
-
-        return maxKilled
+        m, n = len(grid), len(grid[0])
+        dp = [[[0, 0] for j in range(n)] for i in range(m)]
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 'E':
+                    dp[i][j] = [dp[i-1][j][0] + 1, dp[i][j-1][1] + 1]
+                elif grid[i][j] == '0':
+                    dp[i][j] = [dp[i-1][j][0], dp[i][j-1][1]]
+        res = 0
+        for i in reversed(range(m)):
+            for j in reversed(range(n)):
+                if i != m - 1:
+                    if grid[i+1][j] != 'W':
+                        dp[i][j][0] = dp[i+1][j][0]
+                if j != n - 1:
+                    if grid[i][j+1] != 'W':
+                        dp[i][j][1] = dp[i][j+1][1]
+                if grid[i][j] == '0':
+                    res = max(res, dp[i][j][0] + dp[i][j][1])
+        return res
+                        

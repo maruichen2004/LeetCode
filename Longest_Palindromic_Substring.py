@@ -1,18 +1,24 @@
-class Solution:
-    # @return a string
+class Solution(object):
     def longestPalindrome(self, s):
-        longest, mid = "", (len(s) - 1) / 2
+        """
+        :type s: str
+        :rtype: str
+        """
+        n = len(s)
+        longest, mid = "", (n - 1 )/2
         i, j = mid, mid
-        while i >= 0 and j < len(s):
-            args = [(s, i, i), (s, i, i+1), (s, j, j), (s, j, j+1)]
-            for arg in args:
-                tmp = self.longestPalindromeSubstr(arg[0], arg[1], arg[2])
-                if len(tmp) > len(longest): longest = tmp
-            if len(longest) >= 2 * i: return longest
+        while i >= 0 and j < n:
+            args = [(i, i), (i, i+1), (j, j), (j, j+1)]
+            for l, r in args:
+                tmp = self.helper(s, l, r)
+                if len(tmp) > len(longest):
+                    longest = tmp
+            if len(longest) >= 2 * i:
+                return longest
             i, j = i - 1, j + 1
         return longest
         
-    def longestPalindromeSubstr(self, s, left, right):
-        while left >= 0 and right < len(s) and s[left] == s[right]:
-            left, right = left - 1, right + 1
-        return s[left+1:right]
+    def helper(self, s, l, r):
+        while l >= 0 and r < len(s) and s[l] == s[r]:
+            l, r = l - 1, r + 1
+        return s[l+1:r]
