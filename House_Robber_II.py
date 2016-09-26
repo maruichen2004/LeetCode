@@ -1,14 +1,20 @@
-class Solution:
-    # @param {integer[]} nums
-    # @return {integer}
+class Solution(object):
     def rob(self, nums):
-        if len(nums) == 0: return 0
-        if len(nums) == 1: return nums[0]
-        return max(self.robRange(nums, 0, len(nums) - 1), self.robRange(nums, 1, len(nums)))
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if len(nums) == 0:
+            return 0
+        if len(nums) == 1:
+            return nums[0]
+        return max(self.helper(nums, 0, len(nums)-1), self.helper(nums, 1, len(nums)))
         
-    def robRange(self, nums, start, end):
-        n, n1 = nums[start], 0
-        for i in range(start + 1, end):
-            n1, n2 = n, n1
-            n = max(nums[i] + n2, n1)
-        return n
+    def helper(self, nums, l, r):
+        if l + 1 == r:
+            return nums[l]
+        dp = [0] * r
+        dp[l], dp[l+1] = nums[l], max(nums[l], nums[l+1])
+        for i in range(l+2, r):
+            dp[i] = max(dp[i-2] + nums[i], dp[i-1])
+        return dp[r-1]

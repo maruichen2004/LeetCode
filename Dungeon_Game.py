@@ -1,15 +1,17 @@
-class Solution:
-    # @param dungeon, a list of lists of integers
-    # @return a integer
+class Solution(object):
     def calculateMinimumHP(self, dungeon):
-        if len(dungeon) == 0 or len(dungeon[0]) == 0: return 0
-        dp = [[0 for i in range(len(dungeon[0]))] for j in range(len(dungeon))]
-        for i in reversed(range(len(dungeon))):
-            for j in reversed(range(len(dungeon[0]))):
-                if i == len(dungeon) - 1 and j == len(dungeon[0]) - 1:
-                    dp[i][j] = max(1, 1 - dungeon[i][j])
-                else:
-                    right = 2**32-1 if j == len(dungeon[0]) - 1 else dp[i][j+1] - dungeon[i][j]
-                    down = 2**32-1 if i == len(dungeon) - 1 else dp[i+1][j] - dungeon[i][j]
-                    dp[i][j] = max(1, min(down, right))
+        """
+        :type dungeon: List[List[int]]
+        :rtype: int
+        """
+        m, n = len(dungeon), len(dungeon[0])
+        dp = [[0 for j in range(n)] for i in range(m)]
+        dp[m-1][n-1] = max(1, 1 - dungeon[m-1][n-1])
+        for i in reversed(range(m-1)):
+            dp[i][n-1] = max(1, dp[i+1][n-1] - dungeon[i][n-1])
+        for j in reversed(range(n-1)):
+            dp[m-1][j] = max(1, dp[m-1][j+1] - dungeon[m-1][j])
+        for i in reversed(range(m-1)):
+            for j in reversed(range(n-1)):
+                dp[i][j] = max(1, min(dp[i+1][j], dp[i][j+1]) - dungeon[i][j])
         return dp[0][0]
