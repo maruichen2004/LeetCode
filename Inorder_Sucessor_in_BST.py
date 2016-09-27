@@ -12,12 +12,13 @@ class Solution(object):
         :type p: TreeNode
         :rtype: TreeNode
         """
-        res = None
-        cur = root
-        while cur:
-            if cur.val > p.val:
-                res = cur
+        cur, stack = root, []
+        while cur or stack:
+            while cur:
+                stack.append(cur)
                 cur = cur.left
-            else:
-                cur = cur.right
-        return res
+            parent = stack.pop()
+            if parent.val > p.val:
+                return parent
+            cur = parent.right
+        return None

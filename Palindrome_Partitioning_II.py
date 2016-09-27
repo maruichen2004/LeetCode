@@ -1,12 +1,19 @@
-class Solution:
-    # @param {string} s
-    # @return {integer}
+class Solution(object):
     def minCut(self, s):
-        isPalindrome = [[False for i in range(len(s))] for j in range(len(s))]
-        T = [len(s) - 1 - i for i in range(len(s) + 1)]
-        for i in reversed(range(len(s))):
-            for j in range(i, len(s)):
-                if s[i] == s[j] and (j - i < 2 or isPalindrome[i+1][j-1]):
-                    isPalindrome[i][j] = True
-                    T[i] = min(T[i], 1 + T[j+1])
-        return T[0]
+        """
+        :type s: str
+        :rtype: int
+        """
+        if len(s) == 0:
+            return 0
+        n = len(s)
+        p = [[False for j in range(n)] for i in range(n)]
+        dp = [0] * (n+1)
+        for i in range(n+1):
+            dp[i] = n - 1 - i
+        for i in reversed(range(n)):
+            for j in range(i, n):
+                if s[i] == s[j] and (j - i <= 2 or p[i+1][j-1]):
+                    p[i][j] = True
+                    dp[i] = min(dp[i], dp[j+1] + 1)
+        return dp[0]
