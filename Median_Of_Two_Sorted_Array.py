@@ -1,17 +1,28 @@
-class Solution:
-    # @return a float
-    def findMedianSortedArrays(self, A, B):
-        lenA, lenB = len(A), len(B)
-        if (lenA + lenB) % 2 == 1:
-            return self.getMedian(A, B, (lenA + lenB) / 2 + 1)
+class Solution(object):
+    def findMedianSortedArrays(self, nums1, nums2):
+        """
+        :type nums1: List[int]
+        :type nums2: List[int]
+        :rtype: float
+        """
+        total = len(nums1) + len(nums2)
+        if total % 2 == 1:
+            return self.findK(nums1, nums2, total/2 + 1)
         else:
-            return 0.5 * (self.getMedian(A, B, (lenA + lenB) / 2) + self.getMedian(A, B, (lenA + lenB) / 2 + 1))
+            return 0.5*(self.findK(nums1, nums2, total/2) + self.findK(nums1, nums2, total/2+1))
             
-    def getMedian(self, A, B, k):
-        if len(A) > len(B): return self.getMedian(B, A, k)
-        if len(A) == 0: return B[k - 1]
-        if k == 1: return min(A[0], B[0])
-        pa = min(k/2, len(A))
+    def findK(self, nums1, nums2, k):
+        if len(nums1) > len(nums2):
+            return self.findK(nums2, nums1, k)
+        if len(nums1) == 0:
+            return nums2[k-1]
+        if k == 1:
+            return min(nums1[0], nums2[0])
+        pa = min(k/2, len(nums1))
         pb = k - pa
-        if A[pa - 1] <= B[pb - 1]: return self.getMedian(A[pa:], B, pb)
-        else: return self.getMedian(A, B[pb:], pa)
+        if nums1[pa-1] < nums2[pb-1]:
+            return self.findK(nums1[pa:], nums2, k - pa)
+        elif nums1[pa-1] > nums2[pb-1]:
+            return self.findK(nums1, nums2[pb:], k - pb)
+        else:
+            return nums1[pa-1]
