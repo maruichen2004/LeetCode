@@ -10,14 +10,13 @@ class Solution(object):
         :type n: Maximum number of characters to read (int)
         :rtype: The number of characters read (int)
         """
-        res = 0
-        while n > 0:
-            buf4 = [""] * 4
-            cur = read4(buf4)
-            if cur == 0:
-                return res
-            for i in range(min(cur, n)):
-                buf[res] = buf4[i]
-                res += 1
-                n -= 1
-        return res
+        idx, cnt, buf4 = 0, 0, [''] * 4
+        for i in range(n):
+            if idx == cnt:
+                cnt = read4(buf4)
+                idx = 0
+                if cnt == 0:
+                    return i
+            buf[i] = buf4[idx]
+            idx += 1
+        return n

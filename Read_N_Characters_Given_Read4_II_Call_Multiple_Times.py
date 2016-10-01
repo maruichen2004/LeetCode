@@ -5,9 +5,9 @@
 
 class Solution(object):
     def __init__(self):
-        self.buf4 = [""] * 4
-        self.rpos = 0
-        self.wpos = 0
+        self.idx = 0
+        self.cnt = 0
+        self.buf4 = [''] * 4
         
     def read(self, buf, n):
         """
@@ -16,11 +16,11 @@ class Solution(object):
         :rtype: The number of characters read (int)
         """
         for i in range(n):
-            if self.rpos == self.wpos:
-                self.wpos = read4(self.buf4)
-                self.rpos = 0
-                if self.wpos == 0:
+            if self.idx == self.cnt:
+                self.cnt = read4(self.buf4)
+                self.idx = 0
+                if self.cnt == 0:
                     return i
-            buf[i] = self.buf4[self.rpos]
-            self.rpos += 1
+            buf[i] = self.buf4[self.idx]
+            self.idx += 1
         return n
