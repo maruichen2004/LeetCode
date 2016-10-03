@@ -1,25 +1,23 @@
-class Solution:
-    # @param s, an input string
-    # @param p, a pattern string
-    # @return a boolean
+class Solution(object):
     def isMatch(self, s, p):
-        idxs, idxp, ss, star = 0, 0, 0, -1
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        idxs, idxp, sstar, pstar = 0, 0, -1, -1
         while idxs < len(s):
-            if idxp < len(p) and (p[idxp] == s[idxs] or p[idxp] == "?"):
-                idxp, idxs = idxp + 1, idxs + 1
-                continue
-            if idxp < len(p) and p[idxp] == "*":
-                star = idxp
-                ss = idxs
+            if idxp < len(p) and (s[idxs] == p[idxp] or p[idxp] == '?'):
+                idxs, idxp = idxs + 1, idxp + 1
+            elif idxp < len(p) and p[idxp] == '*':
+                sstar, pstar = idxs, idxp
                 idxp += 1
-                continue
-            if star != -1:
-                idxp = star + 1
-                ss += 1
-                idxs = ss
-                continue
-            return False
-        while idxp < len(p):
-            if p[idxp] != "*": return False
+            elif pstar != -1:
+                idxp = pstar + 1
+                sstar += 1
+                idxs = sstar
+            else:
+                return False
+        while idxp < len(p) and p[idxp] == '*':
             idxp += 1
-        return True
+        return idxp == len(p)
