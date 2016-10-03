@@ -12,13 +12,11 @@ class Solution(object):
         return res
         
     def count(self, k):
-        if k < 1:
-            return 0
         if k == 1:
             return 10
-        res = 1
+        res = 9
         i = 9
         while i >= 11 - k:
             res *= i
             i -= 1
-        return res * 9
+        return res
