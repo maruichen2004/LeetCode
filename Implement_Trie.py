@@ -5,7 +5,6 @@ class TrieNode(object):
         """
         self.children = collections.defaultdict(TrieNode)
         self.flag = False
-        
 
 class Trie(object):
 
@@ -18,10 +17,10 @@ class Trie(object):
         :type word: str
         :rtype: void
         """
-        node = self.root
+        cur = self.root
         for c in word:
-            node = node.children[c]
-        node.flag = True
+            cur = cur.children[c]
+        cur.flag = True
 
     def search(self, word):
         """
@@ -29,12 +28,12 @@ class Trie(object):
         :type word: str
         :rtype: bool
         """
-        node = self.root
+        cur = self.root
         for c in word:
-            if c not in node.children:
+            if c not in cur.children:
                 return False
-            node = node.children[c]
-        return node.flag == True
+            cur = cur.children[c]
+        return cur.flag
 
     def startsWith(self, prefix):
         """
@@ -43,11 +42,11 @@ class Trie(object):
         :type prefix: str
         :rtype: bool
         """
-        node = self.root
+        cur = self.root
         for c in prefix:
-            if c not in node.children:
+            if c not in cur.children:
                 return False
-            node = node.children[c]
+            cur = cur.children[c]
         return True
 
 # Your Trie object will be instantiated and called as such:
