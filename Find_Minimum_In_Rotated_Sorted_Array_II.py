@@ -12,7 +12,7 @@ class Solution(object):
                 res = min(res, nums[l])
                 l = mid
             elif nums[mid] < nums[l]:
-                res = min(res, nums[r])
+                res = min(res, nums[mid])
                 r = mid
             else:
                 l += 1
