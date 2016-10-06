@@ -7,8 +7,8 @@ class Solution(object):
         :rtype: List[float]
         """
         graph = collections.defaultdict(dict)
-        for i, nodes in enumerate(equations):
-            start, end = nodes[0], nodes[1]
+        for i, equation in enumerate(equations):
+            start, end = equation[0], equation[1]
             graph[start][end] = values[i]
             graph[end][start] = 1.0 / values[i]
             graph[start][start] = 1.0
@@ -20,18 +20,16 @@ class Solution(object):
             else:
                 res.append(self.bfs(graph, start, end))
         return res
-    
+        
     def bfs(self, graph, start, end):
         visited = set([start])
         q = [(start, 1.0)]
         while q:
-            size = len(q)
-            for i in range(size):
-                cur, val = q.pop(0)
-                if cur == end:
-                    return val
-                for node in graph[cur]:
-                    if node not in visited:
-                        visited.add(node)
-                        q.append((node, val * graph[cur][node]))
+            cur, val = q.pop(0)
+            if cur == end:
+                return val
+            for node in graph[cur]:
+                if node not in visited:
+                    visited.add(node)
+                    q.append((node, val * graph[cur][node]))
         return -1.0

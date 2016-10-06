@@ -6,14 +6,14 @@ class Solution(object):
         :rtype: List[List[int]]
         """
         res = []
-        self.dfs(n, k, [], res)
+        self.dfs(n, k, [], res, 1)
         return res
         
-    def dfs(self, n, k, cur, res):
-        if k == 0:
+    def dfs(self, n, k, cur, res, start):
+        if len(cur) == k:
             res.append(cur)
+        elif n - start + 1 < k - len(cur):
+            return
         else:
-            for i in reversed(range(1, n+1)):
-                if k > i:
-                    break
-                self.dfs(i-1, k-1, cur+[i], res)
+            for i in range(start, n+1):
+                self.dfs(n, k, cur+[i], res, i+1)
