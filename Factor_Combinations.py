@@ -10,9 +10,7 @@ class Solution(object):
         
     def dfs(self, n, f, cur, res):
         if cur and n >= f:
-            cur.append(n)
-            res.append(list(cur))
-            cur.pop()
+            res.append(cur + [n])
         for i in range(f, int(n**0.5)+1):
             if n % i == 0:
-                self.dfs(n/i, i, cur + [i], res)
+                self.dfs(n/i, i, cur+[i], res)
