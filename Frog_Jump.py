@@ -4,17 +4,19 @@ class Solution(object):
         :type stones: List[int]
         :rtype: bool
         """
-        q = collections.deque()
-        visited = collections.defaultdict(lambda: collections.defaultdict(bool))
-        stonesSet = set(stones)
-        visited[0][0] = True
-        q.append((0, 0))
-        while q:
-            cur, k = q.popleft()
-            if cur == stones[-1]:
-                return True
-            for step in range(k-1, k+2):
-                if step > 0 and cur+step in stonesSet and not visited[cur+step][step]:
-                    q.append((cur+step, step))
-                    visited[cur+step][step] = True
-        return False
+        if len(stones) <= 1:
+            return True
+        n = len(stones)
+        m = collections.defaultdict(set)
+        m[0].add(0)
+        dp = [0] * n
+        k = 0
+        for i in range(1, n):
+            while dp[k] + 1 < stones[i] - stones[k]:
+                k += 1
+            for j in range(k, i):
+                t = stones[i] - stones[j]
+                if t-1 in m[j] or t in m[j] or t+1 in m[j]:
+                    m[i].add(t)
+                    dp[i] = max(dp[i], t)
+        return dp[n-1] > 0
